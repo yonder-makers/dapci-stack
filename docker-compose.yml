@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  portainer:
+    restart: always
+    image: portainer/portainer-ce:latest
+    ports:
+      - "2001:2001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - type: volume
+        source: portainer-data
+        target: /data
+
+  whoami:
+    image: traefik/whoami
+    restart: unless-stopped
+    ports:
+      - "2002:2002"
+    command:
+      - --port=2002
+      - --name=iamfoo
+
+volumes:
+  portainer-data:
