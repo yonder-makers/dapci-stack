@@ -5,12 +5,32 @@ services:
     restart: always
     image: portainer/portainer-ce:latest
     ports:
-      - "2001:2001"
+      - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - type: volume
         source: portainer-data
         target: /data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN_NAME}`)"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+  traefik:
+    image: traefik:latest
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/:/etc/traefik/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN_NAME}`)"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
   whoami:
     image: traefik/whoami
@@ -19,7 +39,11 @@ services:
       - "2002:2002"
     command:
       - --port=2002
-      - --name=iamfoo
+      - --name="I am DaPCI"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.${DOMAIN_NAME}`)"
+      - "traefik.http.services.whoami.loadbalancer.server.port=2002"
 
 volumes:
   portainer-data:
