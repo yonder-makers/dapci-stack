@@ -4,8 +4,8 @@ services:
   portainer:
     restart: always
     image: portainer/portainer-ce:latest
-    ports:
-      - "9000:9000"
+    # ports:
+    #   - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - type: volume
@@ -23,20 +23,21 @@ services:
       - no-new-privileges:true
     ports:
       - "80:80"
-      - "443:443"
+      # - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/:/etc/traefik/
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.traefik.middlewares=dapci-auth@file"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
   whoami:
     image: traefik/whoami
     restart: unless-stopped
-    ports:
-      - "2002:2002"
+    # ports:
+    #   - "2002:2002"
     command:
       - --port=2002
       - --name="I am DaPCI"

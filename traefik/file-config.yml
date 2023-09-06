@@ -1,0 +1,5 @@
+http:
+  middlewares:
+    dapci-auth:
+      basicauth:
+        usersfile: /etc/traefik/dapci-users

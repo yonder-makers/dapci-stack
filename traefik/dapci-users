@@ -1,0 +1,4 @@
+# use utils-generate-password 
+# the format is username:hashed_password
+# the default one is admin:dapci
+admin:$2y$05$J/6n/OcK4wv1oUoagkTixepkaS54uuecla9grEgu0MAOc9HBtGNp2
