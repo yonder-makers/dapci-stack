@@ -17,6 +17,10 @@
 2. In the Home section, click the `edit` icon for the `local` environment
 3. Configure the name you want (eg: My DaPCI environment) and the public IP to the value `portainer.{DOMAIN_NAME}` (the domain name you configured in the .env file).
 
+## Monitoring
+
+- [Check prometheus targets](http://prometheus.dapci.local/targets)
+
 
 ## Helpful resources
 
