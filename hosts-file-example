@@ -1,3 +1,5 @@
 127.0.0.1 traefik.dapci.local
 127.0.0.1 portainer.dapci.local
 127.0.0.1 whoami.dapci.local
+127.0.0.1 prometheus.dapci.local
+

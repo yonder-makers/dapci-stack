@@ -16,3 +16,8 @@
 1. When you open the first time, it will ask to configure user and password.
 2. In the Home section, click the `edit` icon for the `local` environment
 3. Configure the name you want (eg: My DaPCI environment) and the public IP to the value `portainer.{DOMAIN_NAME}` (the domain name you configured in the .env file).
+
+
+## Helpful resources
+
+- [Collect Docker metrics with Prometheus](https://docs.docker.com/config/daemon/prometheus/)
