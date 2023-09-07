@@ -36,6 +36,24 @@ services:
       - "traefik.http.routers.prometheus.middlewares=dapci-auth@file"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
 
+  grafana:
+    image: grafana/grafana
+    # ports:
+    #   - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - type: volume
+        source: grafana-data
+        target: /var/lib/grafana
+    env_file:
+      - ./grafana/config.monitoring
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.grafana.rule=Host(`grafana.${DOMAIN_NAME}`)'
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+
 
   traefik:
     image: traefik:latest
@@ -71,3 +89,5 @@ volumes:
   portainer-data:
 
   prometheus-data:
+
+  grafana-data:
