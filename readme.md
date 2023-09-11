@@ -25,3 +25,5 @@
 ## Helpful resources
 
 - [Collect Docker metrics with Prometheus](https://docs.docker.com/config/daemon/prometheus/)
+- [Collect Docker metrics with cAdvisor and Prometheus](https://prometheus.io/docs/guides/cadvisor/)
+

@@ -15,6 +15,34 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN_NAME}`)"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+  cadvisor:
+    image: ${CADVISOR_IMAGE}
+    privileged: true
+    devices:
+      - /dev/kmsg
+    ports:
+    - 8080:8080
+    command:
+      - "--port=8080"
+      # - "--housekeeping_interval=30s"
+      - "--docker_only=true"
+      - "--disable_metrics=percpu,sched,tcp,udp,disk,diskIO,accelerator,hugetlb,referenced_memory,cpu_topology,resctrl,process"
+      # - "--enable_metrics=cpu,cpuLoad,memory,memory_numa"
+      # - "--enable_metrics=cpu,cpuLoad,cpuset,memory,memory_numa,network,oom_event,perf_event,process"
+      # - "--enable_metrics=accelerator,advtcp,app,cpu,cpuLoad,cpu_topology,cpuset,disk,diskIO,hugetlb,memory,memory_numa,network,oom_event,percpu,perf_event,process,referenced_memory,resctrl,sched,tcp,udp."
+
+    userns_mode: "host"
+    volumes:
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+      - /sys:/sys:ro
+      - /var/run:/var/run:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /sys/fs/cgroup:/cgroup:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /etc/localtime:/etc/localtime:ro
   
   prometheus:
     image: prom/prometheus
