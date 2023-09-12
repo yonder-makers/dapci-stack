@@ -5,8 +5,24 @@ ARG RUNNER_VERSION
 ARG ARCHITECTURE
 ENV DEBIAN_FRONTEND=noninteractive
 
-# update the base packages + add a non-sudo user
 RUN apt-get update -y && apt-get upgrade -y && useradd -m docker
+
+# Add Docker's official GPG key:
+RUN apt-get update
+RUN apt-get install -y ca-certificates curl gnupg
+RUN install -m 0755 -d /etc/apt/keyrings
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg |  gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+RUN chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+RUN echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+   tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker CLI
+RUN apt-get update && \
+    apt-get install -y docker-ce-cli
 
 # install the packages and dependencies along with jq so we can parse JSON (add additional packages as necessary)
 RUN apt-get install -y --no-install-recommends \
@@ -25,6 +41,11 @@ ADD ./start.sh start.sh
 
 # make the script executable
 RUN chmod +x start.sh
+
+# RUN groupadd docker
+RUN usermod -aG docker docker
+
+RUN chmod -v a+s /usr/bin/docker
 
 # set the user to "docker" so all subsequent commands are run as the docker user
 USER docker

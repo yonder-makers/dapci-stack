@@ -10,3 +10,5 @@ services:
       GH_OWNER: ${GH_OWNER}
       GH_REPOSITORY: ${GH_REPOSITORY}
       GH_RUNNER_TOKEN: ${GH_RUNNER_TOKEN}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
