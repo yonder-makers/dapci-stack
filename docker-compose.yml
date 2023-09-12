@@ -1,5 +1,8 @@
 version: "3.8"
 
+include:
+  - ./docker-compose.sonarqube.yml
+
 services:
   portainer:
     restart: always
@@ -21,8 +24,8 @@ services:
     privileged: true
     devices:
       - /dev/kmsg
-    ports:
-    - 8080:8080
+    # ports:
+    # - 8080:8080
     command:
       - "--port=8080"
       # - "--housekeeping_interval=30s"
@@ -31,7 +34,6 @@ services:
       # - "--enable_metrics=cpu,cpuLoad,memory,memory_numa"
       # - "--enable_metrics=cpu,cpuLoad,cpuset,memory,memory_numa,network,oom_event,perf_event,process"
       # - "--enable_metrics=accelerator,advtcp,app,cpu,cpuLoad,cpu_topology,cpuset,disk,diskIO,hugetlb,memory,memory_numa,network,oom_event,percpu,perf_event,process,referenced_memory,resctrl,sched,tcp,udp."
-
     userns_mode: "host"
     volumes:
       - /var/lib/docker/:/var/lib/docker:ro
@@ -43,6 +45,10 @@ services:
       - /sys/fs/cgroup:/cgroup:ro
       - /etc/machine-id:/etc/machine-id:ro
       - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.${DOMAIN_NAME}`)"
+      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
   
   prometheus:
     image: prom/prometheus
