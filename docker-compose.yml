@@ -2,6 +2,7 @@ version: "3.8"
 
 include:
   - ./docker-compose.sonarqube.yml
+  - ./github-runner/docker-compose.github-runner.yml
 
 services:
   portainer:

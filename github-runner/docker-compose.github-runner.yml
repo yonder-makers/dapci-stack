@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  github-runner:
+    build:
+      context: .
+      args:
+        RUNNER_VERSION: '2.309.0'
+        ARCHITECTURE: '${CPU_ARCHITECTURE}'
+    environment:
+      GH_OWNER: ${GH_OWNER}
+      GH_REPOSITORY: ${GH_REPOSITORY}
+      GH_RUNNER_TOKEN: ${GH_RUNNER_TOKEN}
